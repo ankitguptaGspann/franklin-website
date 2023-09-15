@@ -3,7 +3,7 @@ version: 1
 indices:
     blog:
       include:
-        - '/blog/**'
+        - '/**'
       exclude:
         - '/blog/webinar*'
       target: /query-index.xlsx

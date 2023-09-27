@@ -6,7 +6,9 @@ import {
   decorateButtons,
   decorateIcons,
   decorateSections,
+  getMetadata,
   decorateBlocks,
+  toClassName,
   decorateTemplateAndTheme,
   waitForLCP,
   loadBlocks,
@@ -27,6 +29,35 @@ function buildHeroBlock(main) {
     const section = document.createElement('div');
     section.append(buildBlock('hero', { elems: [picture, h1] }));
     main.prepend(section);
+  }
+}
+
+/**
+ * to add/remove a template, just add/remove it in the list below
+ */
+const TEMPLATE_LIST = [
+  'newsroom',
+  'article',
+];
+
+/**
+ * Run template specific decoration code.
+ * @param {Element} main The container element
+ */
+async function decorateTemplates(main) {
+  try {
+    const template = toClassName(getMetadata('template'));
+    const templates = TEMPLATE_LIST;
+    if (templates.includes(template)) {
+      const mod = await import(`../templates/${template}/${template}.js`);
+      loadCSS(`${window.hlx.codeBasePath}/templates/${template}/${template}.css`);
+      if (mod.default) {
+        await mod.default(main);
+      }
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Auto Blocking failed', error);
   }
 }
 
@@ -77,8 +108,10 @@ async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
+  debugger;
   if (main) {
     decorateMain(main);
+    await decorateTemplates(main);  // Added the template newsroom
     document.body.classList.add('appear');
     await waitForLCP(LCP_BLOCKS);
   }
@@ -130,6 +163,17 @@ async function loadPage() {
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();
+
+  var newsroomElement = document.querySelector('main');
+
+  var newDiv = document.createElement('div');  
+
+    newDiv.textContent = "This code is not from template";
+
+  newsroomElement.appendChild(newDiv);
+
 }
 
 loadPage();
+
+

@@ -10,6 +10,13 @@
             "isPalette": true,
             "includePaths": [ "**.docx**" ],
             "paletteRect": "top: 50px; bottom: 10px; right: 10px; left: auto; width:400px; height: calc(100vh - 60px)"
-        }
+        },
+        {
+            "id": "library",
+            "title": "Library",
+            "environments": ["edit"],
+            "url": "https://main--franklin-website--ankitguptagspann.hlx.page/tools/sidekick/library.html",
+            "includePaths": ["**.docx**"]
+      }
     ]
 }
